@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/Firebase/firebase_functions.dart';
+import 'package:todo/home/task_model.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   AddTaskBottomSheet({super.key});
@@ -10,7 +13,7 @@ class AddTaskBottomSheet extends StatefulWidget {
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime chosenDate = DateTime.now();
   var titleController = TextEditingController();
-  var DescriptionController = TextEditingController();
+  var descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
           SizedBox(height: 26),
           TextFormField(
-            controller: DescriptionController,
+            controller: descriptionController,
             decoration: InputDecoration(
               label: Text(
                 "Description ",
@@ -92,7 +95,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-              onPressed: () {},
+              onPressed: () {
+                TaskModel model=TaskModel(
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    date: chosenDate.millisecondsSinceEpoch);
+                FirebaseFunctions.addTack(model);
+              },
               child: Text(
                 "Add Task",
                 style: TextStyle(
