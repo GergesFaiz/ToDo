@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:todo/Firebase/firebase_functions.dart';
+import 'package:todo/home/task_model.dart';
 
 class TasckItem extends StatelessWidget {
-  TasckItem({super.key});
+  TaskModel model;
+
+  TasckItem({required this.model, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,25 +17,30 @@ class TasckItem extends StatelessWidget {
         color: Colors.white,
       ),
       child: Slidable(
-        startActionPane: ActionPane(motion: ScrollMotion(), children: [
-          SlidableAction(
-            onPressed: (context) {
+        startActionPane: ActionPane(
+          motion: ScrollMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (context) {
+                FirebaseFunctions.deletTask(model.id??"");
 
-            },
-            backgroundColor: Color(0xFFFE4A49),
-            icon: Icons.delete,
-            label: 'Delete',
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(25),bottomLeft: Radius.circular(25)),
-          ),
-          SlidableAction(
-            onPressed: (context) {
-
-            },
-            backgroundColor: Colors.blue,
-            icon: Icons.share,
-            label: 'Share',
-          ),
-        ]),
+              },
+              backgroundColor: Color(0xFFFE4A49),
+              icon: Icons.delete,
+              label: 'Delete',
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                bottomLeft: Radius.circular(25),
+              ),
+            ),
+            SlidableAction(
+              onPressed: (context) {},
+              backgroundColor: Colors.blue,
+              icon: Icons.share,
+              label: 'Share',
+            ),
+          ],
+        ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -50,7 +59,7 @@ class TasckItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "TaskTitle",
+                      model.title ?? "",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -59,7 +68,7 @@ class TasckItem extends StatelessWidget {
                         color: Colors.blue,
                       ),
                     ),
-                    Text("Tasckdescraption"),
+                    Text(model.description ?? ""),
                   ],
                 ),
               ),

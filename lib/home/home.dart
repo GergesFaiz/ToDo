@@ -49,10 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add, color: Colors.white, size: 30),
       ),
       bottomNavigationBar: BottomAppBar(
+        padding: EdgeInsets.zero,
         shape: CircularNotchedRectangle(),
         notchMargin: 10,
+        height: 60,
         color: Colors.white,
-        height: 84,
         child: BottomNavigationBar(
           backgroundColor: Colors.transparent,
           elevation: 0,

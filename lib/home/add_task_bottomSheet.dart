@@ -50,7 +50,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             decoration: InputDecoration(
               label: Text(
                 "Description ",
-                style: TextStyle(color: Colors.grey.shade700 , fontSize: 20),
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 20),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.blue),
@@ -96,11 +96,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               onPressed: () {
-                TaskModel model=TaskModel(
-                    title: titleController.text,
-                    description: descriptionController.text,
-                    date: chosenDate.millisecondsSinceEpoch);
-                FirebaseFunctions.addTack(model);
+                TaskModel model = TaskModel(
+                  title: titleController.text,
+                  description: descriptionController.text,
+                  date: DateUtils.dateOnly(chosenDate).millisecondsSinceEpoch,
+                );
+                FirebaseFunctions.addTask(model).then((value) {
+                  Navigator.pop(context);
+                });
               },
               child: Text(
                 "Add Task",
