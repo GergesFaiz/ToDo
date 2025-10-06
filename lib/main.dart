@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:todo/home/home.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
+import 'auth/auth.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseFirestore.instance.enableNetwork();
+  // await FirebaseFirestore.instance.enableNetwork();
   runApp(const MyApp());
 }
 
@@ -20,8 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: HomeScreen.routName,
-      routes: {HomeScreen.routName: (context) => HomeScreen()},
+      initialRoute: Auth.routName,
+      routes: {
+        HomeScreen.routName: (context) => HomeScreen(),
+        Auth.routName: (context) => Auth()
+      },
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     );
