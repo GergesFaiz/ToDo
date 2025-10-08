@@ -49,17 +49,24 @@ class FirebaseFunctions {
   static Future<void> deletTask(String id) {
     return getTaskCollection().doc(id).delete();
   }
-
+  static bool isValidEmail(String email) {
+    return RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(email);
+  }
   static void createUserAccount(
-    String phone,
-    String userName,
-    String email,
-    String password,
-  ) async {
+      String userName,
+      String email,
+      String phone,
+      String password,
+      ) async {
+    if (!isValidEmail(email)) {
+      print('❌ الإيميل غير صالح: $email');
+      return;
+    }
 
     try {
-      UserCredential credential = await FirebaseAuth.instance
+      final credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+
       UserModel user = UserModel(
         id: credential.user?.uid ?? "",
         email: email,
@@ -67,17 +74,46 @@ class FirebaseFunctions {
         phone: phone,
       );
       addUser(user);
+      print('✅ تم إنشاء الحساب بنجاح');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        print('❌ كلمة المرور ضعيفة');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        print('❌ الإيميل مستخدم بالفعل');
+      } else {
+        print('❌ خطأ Firebase: ${e.message}');
       }
     } catch (e) {
-      print(e);
+      print('❌ خطأ غير متوقع: $e');
     }
+    // }
+    // static void createUserAccount(
+    //   String phone,
+    //   String userName,
+    //   String email,
+    //   String password,
+    // ) async {
+    //   try {
+    //     final credential = await FirebaseAuth.instance
+    //         .createUserWithEmailAndPassword(email: email, password: password);
+    //     UserModel user = UserModel(
+    //       id: credential.user?.uid ?? "",
+    //       email: email,
+    //       userName: userName,
+    //       phone: phone,
+    //     );
+    //     addUser(user);
+    //   } on FirebaseAuthException catch (e) {
+    //     if (e.code == 'weak-password') {
+    //       print('The password provided is too weak.');
+    //     } else if (e.code == 'email-already-in-use') {
+    //       print('The account already exists for that email.');
+    //     }
+    //   } catch (e) {
+    //     print(e);
+    //   }
+    // }
   }
-
   static login(String email, String password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance

@@ -104,10 +104,10 @@ class Register extends StatelessWidget {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               onPressed: () {
                 FirebaseFunctions.createUserAccount(
-                  emailController.text,
-                  passwordController.text,
                   userNameController.text,
+                  emailController.text,
                   phoneController.text,
+                  passwordController.text,
                 );
               },
               child: Text(
