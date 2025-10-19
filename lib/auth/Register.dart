@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/Firebase/firebase_functions.dart';
+import 'package:todo/home/home.dart';
 
 class Register extends StatelessWidget {
   static const String routName = "Auth";
@@ -104,10 +105,42 @@ class Register extends StatelessWidget {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               onPressed: () {
                 FirebaseFunctions.createUserAccount(
-                  userNameController.text,
-                  emailController.text,
-                  phoneController.text,
-                  passwordController.text,
+                  userName: userNameController.text,
+                  email: emailController.text,
+                  phone: phoneController.text,
+                  password: passwordController.text,
+                  onSuccess: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      HomeScreen.routName,
+                      (route) => false,
+                    );
+                  },
+                  onError: (errorMassage) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Error"),
+                          content: Text(errorMassage),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("OK"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Cansel"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 );
               },
               child: Text(
